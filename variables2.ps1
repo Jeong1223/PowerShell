@@ -604,3 +604,6 @@ $list.servers.server | ? { $_.user -eq "Bob" } | Select-Object ip
 # The result could be output again as text, including the
 # modification:
 $list.get_InnerXML()
+
+[Byte]::MinValue
+[Byte]::MaxValue

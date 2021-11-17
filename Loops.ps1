@@ -230,7 +230,7 @@ Get-Process notepad | ForEach-Object {$_.Kill();}
 Get-Process notepad | ForEach-Object {
     $time = (New-TimeSpan $_.StartTime (Get-Date)).TotalSeconds;
     if ($time -lt 1000) {
-    "Stop process $($_.id) after $time seconds...";
+    "Stop process $($_.id) after $time seconds...";   #$_ pass along
     $_.Kill()
     }
     else {
@@ -257,12 +257,27 @@ Get-Process notepad| Format-Table Id, ProcessName, StartTime
  }
 
 
+$day = 5
+
+Switch ($day) {
+    0 {"Sunday"}
+    1 {"Monday"}
+    2 {"Tuesday"}
+    3 {"Wednesday"}
+    4 {"Thursday"}
+    5 {"Friday"}
+    6 {"Saturday"}
+    default {"Please enter days in the range of 0-6"}
+}
+
 
 # filters results out before you can use them so use switch statement to get all possibilities
+# This Switch works like a loop. Try to open several notepad and apply the statement below.
+#notepad.exe
  Switch (Get-Process notepad) {
     {
     $time = (New-TimeSpan $_.StartTime (Get-Date)).TotalSeconds;
-    $time -le 1
+    $time -ge 1
     }
     {
     "Stop process $($_.id) after $time seconds...";
@@ -286,6 +301,10 @@ Dir C:\ -recurse | ForEach-Object { $_.name } # good option
 $array = 3,6,"Hello",12
 
 $array.GetType().Name  #Object[]
+$array[1].GetType().Name
+$array[2].GetType().Name
+
+$array[1] + $array[2] #cannot covert value "Hello" to type "System.Int32". Error occured.
 
 # Read out this array element by element:
 foreach ($e in $array) {
@@ -308,6 +327,43 @@ $services = Get-WmiObject Win32_Service
 Foreach ($s in $services) { "$($s.Name) = $($s.Caption)" }
 
 
+# TRY CATCH Finally
+# ref: https://jeffbrown.tech/using-exception-messages-with-try-catch-in-powershell/
+try {
+    New-Item -Path C:\doesnotexist `  # escape '
+        -Name myfile.txt `
+        -ItemType File `
+        #-ErrorAction Stop
+}
+catch {
+    Write-Warning -Message "Oops, ran into an issue"
+}
+
+# grab ps error
+try {
+    New-Item -Path C:\doesnotexist `
+        -Name myfile.txt `
+        -ItemType File `
+}
+catch {
+    Write-Warning $Error[0] # $error array of errors [0] is the last error
+}
+
+try {
+    New-Item -Path C:\doesnotexist `
+        -Name myfile.txt `
+        -ItemType File `
+        -ErrorAction Stop
+}
+catch {
+    $message = $_
+    Write-Warning "Something happened! $message"
+}
+
+
+$error[0].Exception.GetType().Fullname
+#System.IO.DirectoryNotFoundException
+
  function open-editor ([string]$path="$home\*.htm") {
     $list = Resolve-Path -Path $path
     Foreach ($file in $list) {
@@ -322,6 +378,30 @@ Foreach ($s in $services) { "$($s.Name) = $($s.Caption)" }
    opne-editor C:\temp\*.htm*
 
 
+   # Using return in a function
+
+function MultiplyEven
+{
+    param($number)
+
+    if ($number %2) {
+        return "$number is not even"
+    } # break, continue
+    else {return "$number is even"}
+
+}
+
+1..10 | ForEach-Object {MultiplyEven -Number $_}
+
+
+
+
+
+
+
+
+
+## start here!!! ##
 
    # Process all files and subdirectories in a directory one by one:
 Foreach ($entry in dir c:\) {

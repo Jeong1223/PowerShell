@@ -433,10 +433,12 @@ Foreach ($entry in dir c:\) {
    ####endregion
    Do {
     $input = Read-Host "Your homepage"
-   } While (!($input -like "www.*.*"))
+   } While (!($input -like "www.*.*")) 
   
-   # Open a file for reading:
+
+   # "Open" a file for reading:
 $file = [system.io.file]::OpenText("C:\autoexec.bat")
+
 # Continue loop until the end of the file has been reached:
 While (!($file.EndOfStream)) {
  # Read and output current line from the file:
@@ -444,8 +446,7 @@ While (!($file.EndOfStream)) {
 }
 
 
-
-# Close file again:
+# "Close" file again:
 $file.close
 
 
@@ -475,7 +476,7 @@ While ($true) {
 }
 
 
-# Create random number generator
+# Create "random" number generator
 $random = New-Object system.random
 
 # Output seven random numbers from 1 to 49
@@ -497,6 +498,7 @@ While ($i -lt 5) {
  $i++
  $i
 } 
+
 # Second expression: the For loop behaves like the While loop:
 $i = 0
 For (;$i -lt 5;) {
@@ -647,10 +649,14 @@ $s1 = "orge"
 $s2 = "George"
 Compare-Object $s1 $s2
 
+$s1 = "george"
+$s2 = "George"
+Compare-Object $s1 $s2  # No difference
+
 
 $before = Get-Process
 $after = Get-Process
-Compare-Object $before $after
+Compare-Object $before $after #No result because there is no difference between them
 
 
 
@@ -663,7 +669,7 @@ $before = Get-Service
 # Stop services only if you are sure that the service
 # is absolutely not required.
 $service = Get-Service wuauserv
-$service.Stop()
+$service.Stop()  
 # Record after state:
 $after = Get-Service
 # A simple comparison will not find differences because
@@ -674,15 +680,16 @@ Compare-Object $before $after
 Compare-Object $before $after -Property Status
 
 #Saving Snapshots for Later Use
-Get-Process | Export-Clixml before.xml
-$before = Import-Clixml before.xml
+Get-Process | Export-Clixml C:\temp\before.xml
+$before = Import-Clixml c:\temp\before.xml
 $after = Get-Process
 Compare-Object $before $after
 
 #Exporting Pipeline Results
 Get-Command -verb out
 
-Dir | Out-File output.txt .\output.txt
+Dir | Out-File c:\temp\output.txt #.\output.txt
+
 Dir | Out-Printer
 
 # This command not only creates a new directory but also returns
@@ -694,7 +701,8 @@ rm testdirectory
 md testdirectory | Out-Null
 rm testdirectory
 # That matches the following redirection:
-md testdirectory > $null
+md c:\temp\testdirectory > $null  #error
+md c:\temp\testdirectory2 > $null
 rm testdirectory
 
 #Changing Pipeline Formatting

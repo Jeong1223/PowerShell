@@ -1,6 +1,6 @@
 # ICE 3 - ForEach Loops
-#Jeong Eun Jang (W0451032)
-#INET 3700
+# Jeong Eun Jang (W0451032)
+# INET 3700
 # George Campanis
 
 # Create the hash table with artists' information

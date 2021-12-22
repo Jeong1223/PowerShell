@@ -1,3 +1,8 @@
+# ICE5 - Error Handeling
+# Jeong Eun Jang (w0451032)
+# INET 3700 Server OS and Scripting
+# George Campanis
+# 2021. 11. 24
 
 
 try {
@@ -9,18 +14,10 @@ catch [System.DivideByZeroException] {
 catch [System.Management.Automation.RuntimeException] {
     Write-Warning "Can't Divide By Zero"
 }
+catch{
+    Write-Warning "Encountered an unexpected error"
+}
 finally{ 
     Write-Host “Tying up all loose ends!”
 }
 
-#   "Encountered an unexpected error"
-
-$one = 1
-$zero = 0
-
-try {
-    $one/$zero
-} 
-catch [System.DivideByZeroException] {
-    Write-Warning "Can't Divide By Zero"
-}
